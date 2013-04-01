@@ -19,7 +19,7 @@ try:
 except ImportError:
 	class Txn:
 		pass
-from util import dblsha
+from util import scrypt
 
 class MerkleTree:
 	def __init__(self, data, detailed=False):
@@ -49,7 +49,7 @@ class MerkleTree:
 				steps.append(L[1])
 				if Ll % 2:
 					L += [L[-1]]
-				L = PreL + [dblsha(L[i] + L[i + 1]) for i in range(StartL, Ll, 2)]
+				L = PreL + [scrypt(L[i] + L[i + 1]) for i in range(StartL, Ll, 2)]
 				Ll = len(L)
 		self._steps = steps
 		self.detail = detail
@@ -59,7 +59,7 @@ class MerkleTree:
 			f = f.txid
 		steps = self._steps
 		for s in steps:
-			f = dblsha(f + s)
+			f = scrypt(f + s)
 		return f
 	
 	def merkleRoot(self):
