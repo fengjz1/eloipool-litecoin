@@ -24,7 +24,7 @@ import re
 import socket
 from struct import pack, unpack
 from time import time
-from util import dblsha, tryErr
+from util import scrypt, tryErr
 
 MAX_PACKET_PAYLOAD = 0x200000
 
@@ -85,7 +85,7 @@ class BitcoinLink(networkserver.SocketHandler):
 			payload = self.ac_in_buffer[0x18:payloadEnd]
 			self.ac_in_buffer = self.ac_in_buffer[payloadEnd:]
 			
-			realcksum = dblsha(payload)[:4]
+			realcksum = scrypt(payload)[:4]
 			if realcksum != cksum:
 				self.logger.debug('Wrong checksum on `%s\' message (%s vs actual:%s); ignoring' % (cmd, b2a_hex(cksum), b2a_hex(realcksum)))
 				return
@@ -155,7 +155,7 @@ class BitcoinNode(networkserver.AsyncSocketServer):
 		assert len(cmd) <= 12
 		cmd += b'\0' * (12 - len(cmd))
 		
-		cksum = dblsha(payload)[:4]
+		cksum = scrypt(payload)[:4]
 		payloadLen = pack('<L', len(payload))
 		return self.netid + cmd + payloadLen + cksum + payload
 	

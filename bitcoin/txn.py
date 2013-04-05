@@ -16,7 +16,7 @@
 
 import bitcoin.script
 from .varlen import varlenDecode, varlenEncode
-from util import dblsha
+from util import scrypt
 from struct import pack, unpack
 
 _nullprev = b'\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0'
@@ -115,7 +115,7 @@ class Txn:
 		self.idhash()
 	
 	def idhash(self):
-		self.txid = dblsha(self.data)
+		self.txid = scrypt(self.data)
 
 # Txn tests
 def _test():

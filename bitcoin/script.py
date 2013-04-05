@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from base58 import b58decode
-from util import dblsha
+from util import scrypt
 
 def _Address2PKH(addr):
 	try:
@@ -26,7 +26,7 @@ def _Address2PKH(addr):
 		return None
 	ver = addr[0]
 	cksumA = addr[-4:]
-	cksumB = dblsha(addr[:-4])[:4]
+	cksumB = scrypt(addr[:-4])[:4]
 	if cksumA != cksumB:
 		return None
 	return (ver, addr[1:-4])
