@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from hashlib import sha256
+from ltc_scrypt import getPoWHash
 from math import log
 import re
 import string
@@ -117,6 +118,9 @@ class shareLogFormatter:
 	@classmethod
 	def get_field_target2pdiff(self, subfunc):
 		return lambda s: target2pdiff(subfunc(s))
+
+def scrypt(b):
+	return getPoWHash(b)
 
 def dblsha(b):
 	return sha256(sha256(b).digest()).digest()
